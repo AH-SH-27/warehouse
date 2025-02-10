@@ -29,7 +29,7 @@ class RoleManager
             case 'admin':
                 return redirect()->route('admin');
             case 'vendor':
-                return redirect()->route('vendor');
+                return redirect()->route('vendor.dashboard');
             case 'client':
                 return redirect()->route('dashboard');
             default:

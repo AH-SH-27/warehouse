@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'address',
+        'role'
     ];
 
     /**
@@ -44,5 +47,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isVendor()
+    {
+        return $this->role === 'vendor';
+    }
+
+    public function store()
+    {
+        return $this->hasOne(Store::class, 'vendor_id');
     }
 }
