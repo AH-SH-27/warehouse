@@ -23,7 +23,7 @@ Route::get('/admin/dashboard', function () {
 
 Route::middleware(['auth', 'verified', 'rolemanager:client'])->group(function(){
     Route::get('/cart',function() { return view('cart'); })->name('cart');
-    Route::post('/orders',[OrdersController::class, 'index'])->name('orders.index');
+    Route::get('/orders',[OrdersController::class, 'index'])->name('orders.index');
     Route::post('/orders/create',[OrdersController::class, 'store'])->name('orders.store');
 });
 

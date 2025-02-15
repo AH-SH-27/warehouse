@@ -28,7 +28,7 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response()->json(['message' => 'Order placed successfully'], 201); 
     }
 
     /**
