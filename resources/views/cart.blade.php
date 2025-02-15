@@ -102,7 +102,7 @@
                 .then(data => {
                     alert("Order placed successfully!");
                     localStorage.removeItem("cart");
-                    window.location.href = "{{ route('orders.index') }}";
+                    window.location.href = "{{ route('orders.clientOrders') }}";
                 })
                 .catch(error => console.error("Error:", error));
         });
