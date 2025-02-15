@@ -28,7 +28,7 @@
                             <textarea
                                 id="description"
                                 name="description"
-                                class="mt-1 h-28 max-h-44 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="mt-1 min-h-28 max-h-44 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 rows="4">{{ old('description', $store->description) }}</textarea>
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
