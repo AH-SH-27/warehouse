@@ -23,9 +23,9 @@ class OrdersController extends Controller
     public function clientOrders(): View
     {
         $orders = Order::where('client_id', Auth::id())
-            ->with('store.products')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        ->with(['items.product', 'store'])
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return view('orders', compact('orders'));
     }
