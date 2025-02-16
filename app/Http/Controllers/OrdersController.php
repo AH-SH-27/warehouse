@@ -17,19 +17,56 @@ class OrdersController extends Controller
      */
     public function index(): View
     {
-        return view('orders');
+        return view('dashboard'); // nothing remove later if not used 
     }
 
     public function clientOrders(): View
     {
         $orders = Order::where('client_id', Auth::id())
-        ->with(['items.product', 'store'])
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->with(['items.product', 'store'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('orders', compact('orders'));
     }
 
+    public function vendorOrders(): View
+    {
+        $vendorStore = Auth::user()->store->id;
+
+        $orders = Order::where('store_id', $vendorStore)
+            ->with('client', 'items.product')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('vendor.order.index', compact('orders'));
+    }
+
+    public function updateOrderStatus(Request $request, Order $order)
+    {
+        if (!Auth::user()->store->find($order)) {
+            return redirect()->route('vendor.orders')->with('error', 'Unauthorized action.');
+        }
+
+        if (in_array($order->status, ['rejected', 'completed'])) {
+            return back()->with('error', 'You cannot change the status of a completed or rejected order.');
+        }
+
+        $request->validate([
+            'status' => 'required|in:pending,processing,shipped,completed,rejected',
+        ]);
+
+        // Increment the taken quantity when making order if order is rejected
+        if ($request->status == 'rejected') {
+            foreach ($order->items as $item) {
+                $item->product->increment('stock_quantity', $item->quantity);
+            }
+        }
+
+        $order->update(['status' => $request->status]);
+
+        return redirect()->route('vendor.orders')->with('success', 'Order status updated.');
+    }
     /**
      * Show the form for creating a new resource.
      */

@@ -40,6 +40,8 @@ Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function(){
     Route::post('/vendor/store/delete',[StoreController::class, 'destroy'])->name('vendor.store.delete');
     Route::resource('/vendor/category', CategoryController::class);
     Route::resource('/vendor/product', ProductController::class);
+    Route::get('/vendor/orders', [OrdersController::class, 'vendorOrders'])->name('vendor.orders');
+    Route::post('/vendor/orders/update-status/{order}', [OrdersController::class, 'updateOrderStatus'])->name('vendor.orders.updateStatus');
 });
 
 Route::middleware('auth')->group(function () {
