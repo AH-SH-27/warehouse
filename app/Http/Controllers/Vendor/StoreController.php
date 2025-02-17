@@ -24,16 +24,27 @@ class StoreController extends Controller
      $request->validate([
         'name'=>['required', 'string', 'max:255'],
         'description'=>['nullable', 'string'],
+        'image' => ['nullable','image','mimes:jpeg,png,jpg,gif','max:2048'],
      ]);
      if(Auth::user()->store)
      {
         return redirect()->route('vendor.dashboard')->with('error','You already have a store');
      }
 
+     $imagePath = null;
+     if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+        $imagePath = $image->storeAs('store_images', $imageName, 'public'); 
+    }
+    
+ 
+
      Store::create([
         'vendor_id'=> Auth::id(),
         'name'=> $request->name,
         'description'=>$request->description,
+        'image' => $imagePath,
      ]);
 
      return redirect()->route('vendor.dashboard')->with('success','Store created successfully');

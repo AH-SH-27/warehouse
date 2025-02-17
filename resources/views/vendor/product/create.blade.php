@@ -1,4 +1,4 @@
-<x-app-layout>
+div<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Add Product') }}
@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6 shadow-md rounded-md">
-                <form action="{{ route('product.store') }}" method="POST">
+                <form action="{{ route('product.store') }}" method="POST"  enctype="multipart/form-data">
                     @csrf
 
                     <!-- Product Name -->
@@ -42,19 +42,25 @@
                                       class="w-full border p-2 rounded-md" value="{{ old('stock_quantity') }}" required />
                         <x-input-error :messages="$errors->get('stock_quantity')" class="mt-2" />
                     </div>
-
+                    
                     <!-- Category Selection -->
                     <div class="mb-4">
                         <x-input-label for="category_id" :value="__('Category')" />
                         <select id="category_id" name="category_id" class="w-full border p-2 rounded-md">
                             <option value="">No Category</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
                             @endforeach
                         </select>
                         <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
+                    </div>
+                    
+                    <div class="mb-4">
+                        <x-input-label for="image" :value="__('Image')" />
+                        <input type="file" name="image" accept="image/*">
+                        <x-input-error :messages="$errors->get('image')" class="mt-2" />
                     </div>
 
                     <!-- Submit Button -->

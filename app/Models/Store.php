@@ -9,7 +9,7 @@ class Store extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['vendor_id', 'name', 'description'];
+    protected $fillable = ['vendor_id', 'name', 'description', 'image'];
 
     public function vendor()
     {

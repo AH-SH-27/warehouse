@@ -11,6 +11,15 @@
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
                 </div>
+                <a href="{{ route('admin.users') }}" class="underline text-sm hover:text-gray-300">
+                    {{ __('Users') }}
+                </a>
+                <a href="{{ route('admin.stores') }}" class="underline text-sm hover:text-gray-300">
+                    {{ __('Stores') }}
+                </a>
+                <a href="{{ route('admin.orders') }}" class="underline text-sm hover:text-gray-300">
+                    {{ __('Orders') }}
+                </a>
             </div>
         </div>
     </div>

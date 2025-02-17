@@ -27,7 +27,7 @@ class RoleManager
         
         switch($authUserRole){
             case 'admin':
-                return redirect()->route('admin');
+                return redirect()->route('admin.dashboard');
             case 'vendor':
                 return redirect()->route('vendor.dashboard');
             case 'client':

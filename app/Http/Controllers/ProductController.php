@@ -45,12 +45,20 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $store = Auth::user()->store;
 
         if (!$store) {
             return redirect()->back()->withErrors(['error' => 'You must create a store first']);
+        }
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $imagePath = $image->storeAs('product_images', $imageName, 'public');
         }
 
         Product::create([
@@ -60,6 +68,7 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'stock_quantity' => $request->stock_quantity,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('product.index')->with('success', 'Product added successfully');

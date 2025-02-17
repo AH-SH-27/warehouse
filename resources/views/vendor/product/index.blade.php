@@ -15,6 +15,7 @@
                 <table class="min-w-full mt-4 bg-white">
                     <thead>
                         <tr>
+                            <th class="px-6 py-3 text-left">Image</th>
                             <th class="px-6 py-3 text-left">Name</th>
                             <th class="px-6 py-3 text-left">Price</th>
                             <th class="px-6 py-3 text-left">Stock</th>
@@ -25,6 +26,7 @@
                     <tbody>
                         @foreach ($products as $product)
                         <tr class="border-b">
+                            <img src="{{ asset('storage/' . $product->image) }}" width="100" alt="Product Image">
                             <td class="px-6 py-4">{{ $product->name }}</td>
                             <td class="px-6 py-4">${{ number_format($product->price, 2) }}</td>
                             <td class="px-6 py-4">{{ $product->stock_quantity }}</td>

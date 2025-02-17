@@ -17,6 +17,7 @@
             <!-- Store Section -->
             <div class="bg-green-500 text-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 @if($vendor->store)
+                <img src="{{ asset('storage/' . $vendor->store->image) }}" width="400" height="400" alt="Store Image">
                 <h2 class="text-xl font-semibold mb-4">Your Store: {{ $vendor->store->name }}</h2>
                 <p class="mb-4">{{ $vendor->store->description }}</p>
 

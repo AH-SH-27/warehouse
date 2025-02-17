@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class OrdersController extends Controller
@@ -80,63 +81,76 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        // Get data from page
-        $cart = $request->input('cart');
+        try {
+            $cart = $request->input('cart');
 
-        if (empty($cart) || !is_array($cart)) {
-            return response()->json(['error' => 'Cart is empty'], 400);
-        }
-
-        $client = Auth::user();
-
-        if ($client->role !== 'client') {
-            return response()->json(['error' => 'Ordering is allowed by clients only'], 400);
-        }
-
-        $totalPrice = 0;
-        $orderItems = [];
-
-        foreach ($cart as $item) {
-            $product = Product::find($item['id']);
-
-            if (!$product || $product->stock_quantity < $item['quantity']) {
-                return response()->json(['error' => "Insufficient stock for {$item['name']}"], 400);
+            if (empty($cart) || !is_array($cart)) {
+                return response()->json(['error' => 'Cart is empty'], 400);
             }
 
-            $totalPrice += $product->price * $item['quantity'];
+            $client = Auth::user();
 
-            $orderItems[] = [
-                'product_id' => $product->id,
-                'quantity' => $item['quantity'],
-                'price' => $product->price,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+            if ($client->role !== 'client') {
+                return response()->json(['error' => 'Ordering is allowed by clients only'], 400);
+            }
 
-            // Remove from stock
-            $product->decrement('stock_quantity', $item['quantity']);
+            $totalPrice = 0;
+            $orderItems = [];
+            $storeId = null;
+
+            DB::beginTransaction();
+
+            foreach ($cart as $item) {
+                $product = Product::find($item['id']);
+
+                if (!$product || $product->stock_quantity < $item['quantity']) {
+                    DB::rollBack();
+                    return response()->json(['error' => "Insufficient stock for {$item['name']}"], 400);
+                }
+
+                $totalPrice += $product->price * $item['quantity'];
+
+                $orderItems[] = [
+                    'product_id' => $product->id,
+                    'quantity' => $item['quantity'],
+                    'price' => $product->price,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+                if (!$storeId) {
+                    $storeId = $product->store_id;
+                }
+
+                $product->decrement('stock_quantity', $item['quantity']);
+            }
+
+            if (!$storeId) {
+                DB::rollBack();
+                return response()->json(['error' => 'Invalid cart data'], 400);
+            }
+
+            $order = Order::create([
+                'client_id' => $client->id,
+                'total_price' => $totalPrice,
+                'status' => 'pending',
+                'store_id' => $storeId,
+            ]);
+
+            foreach ($orderItems as &$orderItem) {
+                $orderItem['order_id'] = $order->id;
+            }
+            OrderItem::insert($orderItems);
+
+            DB::commit();
+
+            return response()->json(['message' => 'Order placed successfully!', 'order_id' => $order->id], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
         }
-
-        // Get store id 
-        $storeId = Product::find($cart[0]['product_id'])->store_id;
-
-
-        // Create order & Set default status
-        $order = Order::create([
-            'client_id' => $client->id,
-            'total_price' => $totalPrice,
-            'status' => 'pending',
-            'store_id' => $storeId,
-        ]);
-
-        // Save order items
-        foreach ($orderItems as &$orderItem) {
-            $orderItem['order_id'] = $order->id;
-        }
-        OrderItem::insert($orderItems);
-
-        return response()->json(['message' => 'Order placed successfully!', 'order_id' => $order->id], 200);
     }
+
 
 
     /**
