@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,11 +17,30 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    // FOR CLIENT ROLE
+    public function clientDashboard(): View
     {
-        return view('dashboard'); // nothing remove later if not used 
+        $today = Carbon::today();
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $startOfMonth = Carbon::now()->startOfMonth();
+
+        $clientId = Auth::id();
+
+        $ordersTotal = Order::where('client_id', $clientId)->count();
+        $ordersToday = Order::where('client_id', $clientId)->whereDate('created_at', $today)->get();
+        $ordersThisWeek = Order::where('client_id', $clientId)->whereBetween('created_at', [$startOfWeek, now()])->count();
+        $ordersThisMonth = Order::where('client_id', $clientId)->whereBetween('created_at', [$startOfMonth, now()])->count();
+
+        return view('dashboard', compact(
+            'ordersTotal',
+            'ordersToday',
+            'ordersThisWeek',
+            'ordersThisMonth'
+        ));
     }
 
+
+    // FOR CLIENT ROLE
     public function clientOrders(): View
     {
         $orders = Order::where('client_id', Auth::id())
@@ -31,6 +51,7 @@ class OrdersController extends Controller
         return view('orders', compact('orders'));
     }
 
+    // FOR VENDOR ROLE
     public function vendorOrders(): View
     {
         $vendorStore = Auth::user()->store->id;
@@ -43,6 +64,7 @@ class OrdersController extends Controller
         return view('vendor.order.index', compact('orders'));
     }
 
+    // FOR VENDOR ROLE
     public function updateOrderStatus(Request $request, Order $order)
     {
         if (!Auth::user()->store->find($order)) {
@@ -79,6 +101,7 @@ class OrdersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // FOR CLIENT ROLE
     public function store(Request $request)
     {
         try {

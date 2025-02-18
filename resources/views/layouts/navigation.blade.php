@@ -4,28 +4,37 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                <div class="shrink-0 flex flex-row items-center py-2">
+                    <a href="/" class="flex items-center me-8 p-2">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <div class="mt-1">StockFlow</div>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    @if(Auth::check())
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @endif
                     <x-nav-link :href="route('public.stores')" :active="request()->routeIs('public.stores')">
                         {{ __('Stores') }}
                     </x-nav-link>
+                    @if (Auth::check() && Auth::user()->role === 'client')
                     <x-nav-link :href="route('cart')" :active="request()->routeIs('cart')">
                         {{ __('Cart') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('orders.clientOrders')" :active="request()->routeIs('orders.clientOrders')">
+                        {{ __('Orders') }}
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                @if(Auth::check())
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -49,13 +58,20 @@
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
                 </x-dropdown>
+                @elseif (Route::has('login') && !Auth::check())
+                <div class="top-right links">
+                    <x-nav-link href="{{ url('/login') }}">Login</x-nav-link>
+                    <x-nav-link href="{{ url('/register') }}">Register</x-nav-link>
+                </div>
+                @endif
+
             </div>
 
             <!-- Hamburger -->
@@ -73,17 +89,32 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            @if(Auth::check())
+
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @endif
             <x-responsive-nav-link :href="route('public.stores')" :active="request()->routeIs('dashboard')">
                 {{ __('Stores') }}
             </x-responsive-nav-link>
+            @if (Auth::check() && Auth::user()->role === 'client')
             <x-responsive-nav-link :href="route('cart')" :active="request()->routeIs('cart')">
                 {{ __('Cart') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('orders.clientOrders')" :active="request()->routeIs('orders.clientOrders')">
+                {{ __('Orders') }}
+            </x-responsive-nav-link>
+            @endif
+            @if (Route::has('login') && !Auth::check())
+            <div class="top-right links">
+                <x-responsive-nav-link href="{{ url('/login') }}">Login</x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ url('/register') }}">Register</x-responsive-nav-link>
+            </div>
+            @endif
         </div>
         <!-- Responsive Settings Options -->
+        @if (Auth::check())
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -100,12 +131,13 @@
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
+                        onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
         </div>
+        @endif
     </div>
 </nav>

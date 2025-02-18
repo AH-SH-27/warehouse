@@ -10,26 +10,29 @@ use App\Http\Controllers\Vendor\StoreController;
 use App\Http\Controllers\Vendor\VendorController;
 use Illuminate\Support\Facades\Route;
 
+// MAIN Page
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified', 'rolemanager:client'])->name('dashboard');
-
+// CLIENT Routes
 Route::middleware(['auth', 'verified', 'rolemanager:client'])->group(function () {
     Route::get('/cart', function () {
         return view('cart');
     })->name('cart');
+    // Route::get('/dashboard', function () {
+    //     return view('dashboard');
+    // })->name('dashboard');
+    Route::get('/dashboard', [OrdersController::class, 'clientDashboard'])->name('dashboard');
     Route::get('/orders', [OrdersController::class, 'clientOrders'])->name('orders.clientOrders');
     Route::post('/orders/create', [OrdersController::class, 'store'])->name('orders.store');
 });
 
+// PUBLIC Routes
 Route::get('/stores', [PublicPagesController::class, 'stores'])->name('public.stores');
 Route::get('/stores/{store}/products', [PublicPagesController::class, 'productsByStore'])->name('public.store.products');
 
-
+// VENDOR Routes
 Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function () {
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->name('vendor.dashboard');
     Route::get('/vendor/store', [StoreController::class, 'index'])->name('vendor.store.create');
@@ -43,12 +46,14 @@ Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function ()
     Route::post('/vendor/orders/update-status/{order}', [OrdersController::class, 'updateOrderStatus'])->name('vendor.orders.updateStatus');
 });
 
+// PROFILE Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// ADMIN Routes
 Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/users', [AdminController::class, 'listUsers'])->name('admin.users');
