@@ -20,9 +20,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:client'])->group(function ()
     Route::get('/cart', function () {
         return view('cart');
     })->name('cart');
-    // Route::get('/dashboard', function () {
-    //     return view('dashboard');
-    // })->name('dashboard');
     Route::get('/dashboard', [OrdersController::class, 'clientDashboard'])->name('dashboard');
     Route::get('/orders', [OrdersController::class, 'clientOrders'])->name('orders.clientOrders');
     Route::post('/orders/create', [OrdersController::class, 'store'])->name('orders.store');
