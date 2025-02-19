@@ -14,18 +14,30 @@
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $store->name }}</h3>
                             <p class="text-gray-600">{{ $store->description }}</p>
                         </div>
-                        <img src="{{ asset('storage/' . $store->image) }}" 
-                             class="w-full sm:w-48 h-48 object-cover rounded-lg mt-4 sm:mt-0" 
-                             alt="{{ $store->name }} Image">
+                        <img src="{{ asset('storage/' . $store->image) }}"
+                            class="w-full sm:w-48 h-48 object-cover rounded-lg mt-4 sm:mt-0"
+                            alt="{{ $store->name }} Image">
                     </div>
+
+                    <form method="GET" action="{{ route('public.store.products', ['store' => $store->id]) }}" class="mb-6">
+                        <label for="category" class="font-semibold">Filter by Category:</label>
+                        <select name="category" id="category" class="border rounded p-2 px-8" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" {{ $categoryId == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </form>
 
                     <h4 class="text-xl font-semibold mt-8 mb-6 text-gray-800">Products</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         @foreach ($products as $product)
                         <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-                            <img src="{{ asset('storage/' . $product->image) }}" 
-                                 class="w-full h-48 object-cover" 
-                                 alt="{{ $product->name }} Image">
+                            <img src="{{ asset('storage/' . $product->image) }}"
+                                class="w-full h-48 object-cover"
+                                alt="{{ $product->name }} Image">
                             <div class="p-4 space-y-2">
                                 <h5 class="text-lg font-bold text-gray-900">{{ $product->name }}</h5>
                                 <p class="text-sm text-gray-600 line-clamp-2">{{ $product->description }}</p>
@@ -39,7 +51,7 @@
                                         class="w-16 border border-gray-300 p-1 rounded-md text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
 
                                     <x-primary-button onclick="addToCart('{{ $product->id }}', '{{ $product->name }}', '{{ $product->price }}', '{{ $product->stock_quantity}}')"
-                                                      class="w-full justify-center">
+                                        class="w-full justify-center">
                                         {{ __('Add to Cart')}}
                                     </x-primary-button>
                                 </div>
