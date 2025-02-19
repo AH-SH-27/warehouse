@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -104,7 +105,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         if ($product->store->vendor_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action');
         }
 
         $request->validate([
@@ -113,7 +114,20 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
             'category_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $oldImage = $product->image;
+        $imagePath = $oldImage;
+        if ($request->hasFile('image')) {
+
+            if ($oldImage) {
+                Storage::disk('public')->delete($oldImage);
+            }
+            $image = $request->file('image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $imagePath = $image->storeAs('product_images', $imageName, 'public');
+        }
 
         $product->update([
             'name' => $request->name,
@@ -121,9 +135,10 @@ class ProductController extends Controller
             'price' => $request->price,
             'stock_quantity' => $request->stock_quantity,
             'category_id' => $request->category_id,
+            'image' => $imagePath,
         ]);
 
-        return redirect()->route('product.index')->with('success', 'Product deleted successfully.');
+        return redirect()->route('product.index')->with('success', 'Product updated successfully');
     }
 
     /**
@@ -132,10 +147,14 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         if ($product->store->vendor_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action');
         }
 
+        $oldImage = $product->image;
+        if ($oldImage) {
+            Storage::disk('public')->delete($oldImage);
+        }
         $product->delete();
-        return redirect()->route('product.index')->with('success', 'Product deleted successfully.');
+        return redirect()->route('product.index')->with('success', 'Product deleted successfully');
     }
 }

@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         if ($user->role === 'vendor') {
-            return redirect()->route('vendor');
+            return redirect()->route('vendor.dashboard');
         }
         return redirect(route('dashboard', absolute: false));
     }

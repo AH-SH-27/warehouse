@@ -15,7 +15,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="">
-                    <form method="POST" action="{{ route('vendor.store.update') }}" class="mt-6 space-y-6">
+                    <form method="POST" action="{{ route('vendor.store.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
                         @csrf
                         <div class="mt-4">
                             <x-input-label for="name" :value="__('Store name')" />
@@ -31,6 +31,12 @@
                                 class="mt-1 min-h-28 max-h-44 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 rows="4">{{ old('description', $store->description) }}</textarea>
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                        </div>
+
+                        <div class="mt-4">
+                            <x-input-label for="image" :value="__('Image')" />
+                            <input type="file" id="image" name="image" accept="image/*">
+                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
 
                         <x-primary-button type="submit" class="bg-blue-500 text-white px-4 py-2">

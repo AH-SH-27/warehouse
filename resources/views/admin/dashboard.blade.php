@@ -92,10 +92,10 @@
                         <a href="{{ route('admin.users') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300">
                             {{ __('Manage Users') }}
                         </a>
-                        <a href="{{ route('admin.stores') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        <a href="{{ route('admin.stores') }}" class="bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 px-4 rounded transition duration-300">
                             {{ __('Manage Stores') }}
                         </a>
-                        <a href="{{ route('admin.orders') }}" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        <a href="{{ route('admin.orders') }}" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-4 rounded transition duration-300">
                             {{ __('Manage Orders') }}
                         </a>
                     </div>

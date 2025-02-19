@@ -26,7 +26,7 @@
                     @else
                     <div class="space-y-6">
                         @foreach ($orders as $order)
-                        <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
+                        <div class="bg-gray-50 border rounded-lg shadow-md overflow-hidden">
                             <div class="p-4 sm:p-6">
                                 <div class="flex items-center justify-between mb-4">
                                     <h3 class="text-lg font-semibold text-gray-900">

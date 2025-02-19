@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class StoreController extends Controller
@@ -13,7 +14,7 @@ class StoreController extends Controller
     // display create store page
     public function index(): View
     {
-        return view('vendor.store.create',[
+        return view('vendor.store.create', [
             'vendor' => Auth::user()
         ]);
     }
@@ -21,58 +22,69 @@ class StoreController extends Controller
     // create new store
     public function store(Request $request)
     {
-     $request->validate([
-        'name'=>['required', 'string', 'max:255'],
-        'description'=>['nullable', 'string'],
-        'image' => ['nullable','image','mimes:jpeg,png,jpg,gif','max:2048'],
-     ]);
-     if(Auth::user()->store)
-     {
-        return redirect()->route('vendor.dashboard')->with('error','You already have a store');
-     }
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+        ]);
+        if (Auth::user()->store) {
+            return redirect()->route('vendor.dashboard')->with('error', 'You already have a store');
+        }
 
-     $imagePath = null;
-     if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-        $imagePath = $image->storeAs('store_images', $imageName, 'public'); 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $imagePath = $image->storeAs('store_images', $imageName, 'public');
+        }
+
+
+
+        Store::create([
+            'vendor_id' => Auth::id(),
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $imagePath,
+        ]);
+
+        return redirect()->route('vendor.dashboard')->with('success', 'Store created successfully');
     }
-    
- 
 
-     Store::create([
-        'vendor_id'=> Auth::id(),
-        'name'=> $request->name,
-        'description'=>$request->description,
-        'image' => $imagePath,
-     ]);
-
-     return redirect()->route('vendor.dashboard')->with('success','Store created successfully');
-    } 
-
-    // direct vendor to edit store page
     public function edit(): View
     {
         $store = Auth::user()->store;
-        if(!$store){
+        if (!$store) {
             return redirect()->route('vendor.dashboard')->with('error', 'No store found');
         }
         return view('vendor.store.edit', compact('store'));
     }
 
-    // update store in data
     public function update(Request $request)
     {
         $store = Auth::user()->store;
-        
-        $request->validate([
-            'name'=>['required', 'string', 'max:255'],
-            'description'=>['nullable', 'string'],
-         ]);
 
-         $store->update([
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+        ]);
+
+        $oldImage = $store->image;
+        $imagePath = $oldImage;
+
+        if ($request->hasFile('image')) {
+            if ($oldImage) {
+                Storage::disk('public')->delete($oldImage);
+            }
+            $image = $request->file('image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $imagePath = $image->storeAs('store_images', $imageName, 'public');
+        }
+
+        $store->update([
             'name' => $request->name,
             'description' => $request->description,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('vendor.dashboard')->with('success', 'Store updated successfully.');
@@ -87,9 +99,13 @@ class StoreController extends Controller
             return redirect()->route('vendor.dashboard')->with('error', 'No store found.');
         }
 
+
+        $oldImage = $store->image;
+        if ($oldImage) {
+            Storage::disk('public')->delete($oldImage);
+        }
         $store->delete();
 
         return redirect()->route('vendor.dashboard')->with('success', 'Store deleted successfully.');
-
     }
 }
