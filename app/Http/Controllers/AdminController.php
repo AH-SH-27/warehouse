@@ -7,7 +7,6 @@ use App\Models\Product;
 use App\Models\Store;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminController extends Controller
