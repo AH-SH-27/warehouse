@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <a href="{{ route('product.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">
+                <a href="{{ route('product.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     {{ __('Add Product') }}
                 </a>
 
@@ -34,12 +34,12 @@
                             <td class="px-6 py-4">{{ $product->stock_quantity }}</td>
                             <td class="px-6 py-4">{{ $product->category->name ?? 'No Category' }}</td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('product.show', $product) }}" class="text-blue-500">View</a>
-                                <a href="{{ route('product.edit', $product) }}" class="text-green-500 ml-2">Edit</a>
+                                <a href="{{ route('product.show', $product) }}" class="text-blue-600 text-sm font-medium">View</a>
+                                <a href="{{ route('product.edit', $product) }}" class="text-teal-600 text-sm font-medium ml-3">Edit</a>
                                 <form action="{{ route('product.destroy', $product) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-500 ml-2" onclick="return confirm('Are you sure?')">Delete</button>
+                                    <button type="submit" class="text-red-600 text-sm font-medium ml-3" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>
                             </td>
                         </tr>

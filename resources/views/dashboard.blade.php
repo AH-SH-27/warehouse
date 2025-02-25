@@ -118,7 +118,7 @@
                                                 </p>
                                                 <div class="ml-2 flex-shrink-0 flex">
                                                     <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $order->status == 'completed' ? 'text-green-600' : 'text-yellow-600' }}">
-                                                    {{ ucfirst($order->status) }}
+                                                        {{ ucfirst($order->status) }}
                                                     </p>
                                                 </div>
                                             </div>

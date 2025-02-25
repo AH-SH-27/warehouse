@@ -1,69 +1,61 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $store->name }}
-        </h2>
-    </x-slot>
+    <div class="relative h-64 sm:h-80 md:h-96 overflow-hidden">
+        <img src="{{ asset('storage/' . $store->image) }}"
+            class="w-full h-full object-cover"
+            alt="{{ $store->name }} Image">
+        <div class="absolute inset-0 bg-black bg-opacity-50 capitalize flex flex-col justify-end p-6">
+            <h3 class="text-3xl font-bold text-white mb-2">{{ $store->name }}</h3>
+            <p class="text-white text-lg">{{ $store->description }}</p>
+        </div>
+    </div>
 
-    <div class="py-12 bg-gray-100">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 sm:p-8">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $store->name }}</h3>
-                            <p class="text-gray-600">{{ $store->description }}</p>
-                        </div>
-                        <img src="{{ asset('storage/' . $store->image) }}"
-                            class="w-full sm:w-48 h-48 object-cover rounded-lg mt-4 sm:mt-0"
-                            alt="{{ $store->name }} Image">
-                    </div>
-
-                    <form method="GET" action="{{ route('public.store.products', ['store' => $store->id]) }}" class="mb-6">
-                        <label for="category" class="font-semibold">Filter by Category:</label>
-                        <select name="category" id="category" class="border rounded p-2 px-8" onchange="this.form.submit()">
-                            <option value="">All Categories</option>
-                            @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" {{ $categoryId == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </form>
-
-                    <h4 class="text-xl font-semibold mt-8 mb-6 text-gray-800">Products</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        @foreach ($products as $product)
-                        <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-                            <img src="{{ asset('storage/' . $product->image) }}"
-                                class="w-full h-48 object-cover"
-                                alt="{{ $product->name }} Image">
-                            <div class="p-4 space-y-2">
-                                <h5 class="text-lg font-bold text-gray-900">{{ $product->name }}</h5>
-                                <p class="text-sm text-gray-600 line-clamp-2">{{ $product->description }}</p>
-                                <p class="text-sm text-gray-600">Stock: <span id="stock-{{ $product->id }}" class="font-medium">{{ $product->stock_quantity }}</span></p>
-                                <p class="text-lg font-semibold text-gray-900">${{ number_format($product->price, 2) }}</p>
-
-                                @if(auth()->check() && auth()->user()->role === 'client')
-                                <div class="flex items-center space-x-2 mt-4">
-                                    <input type="number" id="quantity-{{ $product->id }}"
-                                        min="1" max="{{ $product->stock_quantity }}" value="1"
-                                        class="w-16 border border-gray-300 p-1 rounded-md text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-
-                                    <x-primary-button onclick="addToCart('{{ $product->id }}', '{{ $product->name }}', '{{ $product->price }}', '{{ $product->stock_quantity}}')"
-                                        class="w-full justify-center">
-                                        {{ __('Add to Cart')}}
-                                    </x-primary-button>
-                                </div>
-                                @endif
-                            </div>
-                        </div>
+    <div class="bg-white overflow-hidden mb-5">
+        <div class="p-6 sm:p-8">
+            <div class="flex justify-end mb-6">
+                <form method="GET" action="{{ route('public.store.products', ['store' => $store->id]) }}">
+                    <label for="category" class="font-semibold mr-2">Filter by Category:</label>
+                    <select name="category" id="category" class="border rounded p-2 px-8" onchange="this.form.submit()">
+                        <option value="">All Categories</option>
+                        @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{ $categoryId == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
                         @endforeach
-                    </div>
-                    <div class="mt-8">
-                        {{ $products->links() }}
+                    </select>
+                </form>
+            </div>
+
+            <h4 class="text-xl font-semibold mb-6 text-gray-800">Products</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                @foreach ($products as $product)
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+                    <img src="{{ asset('storage/' . $product->image) }}"
+                        class="w-full h-48 object-cover"
+                        alt="{{ $product->name }} Image">
+                    <div class="p-4 space-y-2">
+                        <h5 class="text-lg font-bold text-gray-900">{{ $product->name }}</h5>
+                        <p class="text-sm text-gray-600 line-clamp-2">{{ $product->description }}</p>
+                        <p class="text-sm text-gray-600">Stock: <span id="stock-{{ $product->id }}" class="font-medium">{{ $product->stock_quantity }}</span></p>
+                        <p class="text-lg font-semibold text-gray-900">${{ number_format($product->price, 2) }}</p>
+
+                        @if(auth()->check() && auth()->user()->role === 'client')
+                        <div class="flex items-center space-x-2 mt-4">
+                            <input type="number" id="quantity-{{ $product->id }}"
+                                min="1" max="{{ $product->stock_quantity }}" value="1"
+                                class="w-32 border border-gray-300 p-1 rounded-md text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+
+                            <x-primary-button onclick="addToCart('{{ $product->id }}', '{{ $product->name }}', '{{ $product->price }}', '{{ $product->stock_quantity}}')"
+                                class="w-full justify-center">
+                                {{ __('Add to Cart')}}
+                            </x-primary-button>
+                        </div>
+                        @endif
                     </div>
                 </div>
+                @endforeach
+            </div>
+            <div class="mt-8">
+                {{ $products->links() }}
             </div>
         </div>
     </div>

@@ -7,6 +7,8 @@ use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use function PHPUnit\Framework\isEmpty;
+
 class PublicPagesController extends Controller
 {
     public function stores(): View
@@ -14,6 +16,12 @@ class PublicPagesController extends Controller
         $stores = Store::paginate(10);
 
         return view('stores', compact('stores'));
+    }
+
+    public function randomStores()
+    {
+        $randomStores = Store::inRandomOrder()->take(4)->get();
+        return view('welcome', compact('randomStores'));
     }
 
 

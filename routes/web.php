@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/', [PublicPagesController::class, 'randomStores'])->name('welcome');
+
 // CLIENT Routes
 Route::middleware(['auth', 'verified', 'rolemanager:client'])->group(function () {
     Route::get('/cart', function () {

@@ -7,12 +7,15 @@
                 <div class="shrink-0 flex flex-row items-center py-2">
                     <a href="/" class="flex items-center me-8 p-2">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                        <div class="mt-1">StockFlow</div>
+                        <div class="mt-1 ml-3 font-bold">Vault</div>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+                        {{ __('Home') }}
+                    </x-nav-link>
                     @if(Auth::check())
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
@@ -66,7 +69,7 @@
                     </x-slot>
                 </x-dropdown>
                 @elseif (Route::has('login') && !Auth::check())
-                <div class="top-right links">
+                <div class="top-right links space-x-2">
                     <x-nav-link href="{{ url('/login') }}">Login</x-nav-link>
                     <x-nav-link href="{{ url('/register') }}">Register</x-nav-link>
                 </div>

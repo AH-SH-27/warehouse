@@ -11,8 +11,8 @@
                 <h2 class="text-2xl font-bold mb-4">Shopping Cart</h2>
                 <div id="cart-container" class="bg-white p-6 shadow-md rounded-md">
                     <div id="cart-items"></div>
-                    <div class="mt-4 font-semibold">Total: <span id="cart-total">$0.00</span></div>
-                    <button id="checkout-btn" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Checkout</button>
+                    <div class="my-4 font-semibold">Total: <span id="cart-total">$0.00</span></div>
+                    <x-primary-button id="checkout-btn">Checkout</x-primary-button>
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
                         </p>
                         <p class="text-sm font-semibold">Total: $${itemTotal.toFixed(2)}</p>
                     </div>
-                    <button onclick="removeFromCart(${index})" class="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
+                    <x-danger-button onclick="removeFromCart(${index})">Remove</x-danger-button>
                 </div>
             `;
             });
@@ -87,7 +87,7 @@
                 alert("Your cart is empty!");
                 return;
             }
-            // Submit order (you need to handle this in OrdersController)
+            // Submitting Here - Request to Backend 
             fetch("{{ route('orders.store') }}", {
                     method: "POST",
                     headers: {
