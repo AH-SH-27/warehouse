@@ -1,7 +1,7 @@
 <x-app-layout>
     <!-- HERO SECTION -->
     <section class="hero-section flex flex-col justify-center items-center text-5xl" style="background-image: url('{{ asset('storage/website_images/hero-img.jpg') }}'); height: 100dvh; width: 100%; background-attachment: fixed; background-repeat: no-repeat; background-size: cover;">
-        <div class="h-full w-full flex flex-col items-center justify-center bg-gradient-to-r from-white/10 via-white/40 to-white/10 text-blue-950 rounded-lg px-10 py-5 shadow-lg gap-5">
+        <div class="h-full w-full flex flex-col items-center justify-center bg-gradient-to-r from-white/10 via-white/50 to-white/10 text-blue-950 rounded-lg px-10 py-5 shadow-lg gap-5">
             <h1 class="font-bold">Vault</h1>
             <p class="text-center font-semibold">Secure, Robust, Trustful <br />Warehouse</p>
         </div>
@@ -35,9 +35,10 @@
 
 
     @if ($randomStores->isNotEmpty())
-    <section class="bg-red-100">
-        <h1>Best Stores</h1>
-        <div>
+    <section class="py-20 bg-white">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-black mb-6">Best Stores</h1>
+        <hr class="bg-blue-500 h-1 w-1/5 flex mx-auto mb-12" />
+        <div class="flex flex-wrap items-center justify-center">
             @foreach ($randomStores as $store)
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <img src="{{ asset('storage/' . $store->image) }}"
@@ -52,7 +53,7 @@
                     </h4>
                     <p class="text-gray-600 text-sm mb-4">{{ $store->description }}</p>
                     <a href="{{ route('public.store.products', ['store' => $store->id]) }}"
-                        class="inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
+                        class="inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                         View Products
                     </a>
                 </div>
@@ -65,7 +66,7 @@
 
     <section class="w-full py-16 bg-gradient-to-b from-gray-700 from-1%  via-gray-100 via-98% to-gray-400 to-1%">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-6">Our Services</h2>
+            <h1 class="text-3xl md:text-4xl font-bold text-center text-white mb-6">Our Services</h1>
             <hr class="bg-blue-500 h-1 w-1/5 flex mx-auto mb-12" />
             <div class="flex flex-wrap justify-center gap-6">
                 <div class="bg-white rounded-lg shadow-lg p-6 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl max-w-sm w-full">

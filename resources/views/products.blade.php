@@ -12,6 +12,25 @@
     <div class="bg-white overflow-hidden mb-5">
         <div class="p-6 sm:p-8">
             <div class="flex justify-end mb-6">
+            <form action="{{ route('search.products', [$store]) }}" method="GET" class="w-full hidden sm:flex items-center justify-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="relative">
+                    <div class="relative w-full">
+                        <input
+                            type="text"
+                            id="searchName"
+                            name="searchName"
+                            placeholder="Search for products"
+                            class="w-full lg:px-40 pl-16 py-2 rounded-full border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" />
+                        <button
+                            type="submit"
+                            class="absolute right-0 top-0 h-full px-3 sm:px-5 rounded-r-full bg-blue-500 hover:bg-blue-600 text-white transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <svg class="w-4 h-4 sm:w-4 sm:h-4" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
                 <form method="GET" action="{{ route('public.store.products', ['store' => $store->id]) }}">
                     <label for="category" class="font-semibold mr-2">Filter by Category:</label>
                     <select name="category" id="category" class="border rounded p-2 px-8" onchange="this.form.submit()">

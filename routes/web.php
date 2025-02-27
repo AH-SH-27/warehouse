@@ -11,11 +11,10 @@ use App\Http\Controllers\Vendor\VendorController;
 use Illuminate\Support\Facades\Route;
 
 // MAIN Page
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/', [PublicPagesController::class, 'randomStores'])->name('welcome');
 
 // CLIENT Routes
 Route::middleware(['auth', 'verified', 'rolemanager:client'])->group(function () {
@@ -28,8 +27,11 @@ Route::middleware(['auth', 'verified', 'rolemanager:client'])->group(function ()
 });
 
 // PUBLIC Routes
+Route::get('/', [PublicPagesController::class, 'randomStores'])->name('welcome');
 Route::get('/stores', [PublicPagesController::class, 'stores'])->name('public.stores');
 Route::get('/stores/{store}/products', [PublicPagesController::class, 'productsByStore'])->name('public.store.products');
+Route::get('/search', [PublicPagesController::class, 'search'])->name('search');
+Route::get('/stores/{store}/search/products', [PublicPagesController::class, 'searchProducts'])->name('search.products');
 
 // VENDOR Routes
 Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function () {
