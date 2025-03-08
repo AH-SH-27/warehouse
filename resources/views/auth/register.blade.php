@@ -63,9 +63,12 @@
             <x-input-error :messages="$errors->get('role')" class="mt-2" />
         </div>
 
-        <hr style="border: 0;height: 1px;background:#4b5563;margin-top:25px;"/>
+        <hr style="border: 0;height: 1px;background:#4b5563;margin-top:25px;" />
 
         <div class="flex items-center justify-end mt-4">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none me-4" href="{{ route('welcome') }}">
+                Back
+            </a>
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>

@@ -7,7 +7,38 @@
         </div>
     </section>
 
-    <section class="w-full min-h-screen bg-gray-50 pt-20 px-4 sm:px-6 lg:px-8">
+
+    @if ($randomStores->isNotEmpty())
+    <section class="py-20 bg-gradient-to-b from-gray-700 from-1%  via-gray-100 via-98% to-gray-400 to-1%">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-white mb-6">Best Stores</h1>
+        <hr class="bg-blue-500 h-1 w-1/5 flex mx-auto mb-12" />
+        <div class="flex flex-wrap items-center justify-center">
+            @foreach ($randomStores as $store)
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="{{ asset('storage/' . $store->image) }}"
+                    class="w-full h-48 object-cover"
+                    alt="{{ $store->name }} Image">
+                <div class="p-4">
+                    <h4 class="text-xl font-bold mb-2">
+                        <a href="{{ route('public.store.products', ['store' => $store->id]) }}"
+                            class="text-blue-600 hover:text-blue-800 hover:underline">
+                            {{ $store->name }}
+                        </a>
+                    </h4>
+                    <p class="text-gray-600 text-sm mb-4">{{ $store->description }}</p>
+                    <a href="{{ route('public.store.products', ['store' => $store->id]) }}"
+                        class="inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        View Products
+                    </a>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </section>
+    @endif
+
+
+    <section class="w-full min-h-screen bg-gray-50 pt-20 px-4 sm:px-6 lg:px-8 ">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
                 <div class="w-full lg:w-1/2 flex justify-center">
@@ -34,34 +65,7 @@
     </section>
 
 
-    @if ($randomStores->isNotEmpty())
-    <section class="py-20 bg-white">
-        <h1 class="text-3xl md:text-4xl font-bold text-center text-black mb-6">Best Stores</h1>
-        <hr class="bg-blue-500 h-1 w-1/5 flex mx-auto mb-12" />
-        <div class="flex flex-wrap items-center justify-center">
-            @foreach ($randomStores as $store)
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="{{ asset('storage/' . $store->image) }}"
-                    class="w-full h-48 object-cover"
-                    alt="{{ $store->name }} Image">
-                <div class="p-4">
-                    <h4 class="text-xl font-bold mb-2">
-                        <a href="{{ route('public.store.products', ['store' => $store->id]) }}"
-                            class="text-blue-600 hover:text-blue-800 hover:underline">
-                            {{ $store->name }}
-                        </a>
-                    </h4>
-                    <p class="text-gray-600 text-sm mb-4">{{ $store->description }}</p>
-                    <a href="{{ route('public.store.products', ['store' => $store->id]) }}"
-                        class="inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                        View Products
-                    </a>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </section>
-    @endif
+
 
 
     <section class="w-full py-16 bg-gradient-to-b from-gray-700 from-1%  via-gray-100 via-98% to-gray-400 to-1%">

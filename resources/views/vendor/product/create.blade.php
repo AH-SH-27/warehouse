@@ -11,7 +11,6 @@
                 <form action="{{ route('product.store') }}" method="POST"  enctype="multipart/form-data">
                     @csrf
 
-                    <!-- Product Name -->
                     <div class="mb-4">
                         <x-input-label for="name" :value="__('Name')" />
                         <x-text-input type="text" id="name" name="name" class="w-full border p-2 rounded-md" 
@@ -19,7 +18,6 @@
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 
-                    <!-- Product Description -->
                     <div class="mb-4">
                         <x-input-label for="description" :value="__('Description')" />
                         <x-text-input type="text" id="description" name="description" class="w-full border p-2 rounded-md" 
@@ -27,7 +25,6 @@
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
-                    <!-- Product Price -->
                     <div class="mb-4">
                         <x-input-label for="price" :value="__('Price')" />
                         <x-text-input type="number" min="0" step="0.01" id="price" name="price" class="w-full border p-2 rounded-md" 
@@ -35,7 +32,6 @@
                         <x-input-error :messages="$errors->get('price')" class="mt-2" />
                     </div>
 
-                    <!-- Stock Quantity -->
                     <div class="mb-4">
                         <x-input-label for="stock_quantity" :value="__('Stock Quantity')" />
                         <x-text-input type="number" min="0" step="1" id="stock_quantity" name="stock_quantity" 
@@ -43,7 +39,6 @@
                         <x-input-error :messages="$errors->get('stock_quantity')" class="mt-2" />
                     </div>
                     
-                    <!-- Category Selection -->
                     <div class="mb-4">
                         <x-input-label for="category_id" :value="__('Category')" />
                         <select id="category_id" name="category_id" class="w-full border p-2 rounded-md">
@@ -63,7 +58,6 @@
                         <x-input-error :messages="$errors->get('image')" class="mt-2" />
                     </div>
 
-                    <!-- Submit Button -->
                     <x-primary-button type="submit" class="mt-4">
                         {{ __('Create Product') }}
                     </x-primary-button>

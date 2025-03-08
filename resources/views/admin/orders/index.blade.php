@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 sm:p-8">
                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Order Management</h2>
-                    
+
                     <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative">
                         <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
                             <thead>
@@ -49,8 +49,8 @@
                                         </span>
                                     </td>
                                     <td class="border-b border-gray-200 px-6 py-4">
-                                        <a href="{{ route('admin.orders.details', $order->id) }}" 
-                                           class="text-blue-600 hover:text-blue-900 transition duration-150 ease-in-out">
+                                        <a href="{{ route('admin.orders.details', $order->id) }}"
+                                            class="text-blue-600 hover:text-blue-900 transition duration-150 ease-in-out">
                                             View Details
                                         </a>
                                     </td>

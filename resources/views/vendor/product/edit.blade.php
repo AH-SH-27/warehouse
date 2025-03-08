@@ -53,7 +53,6 @@
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
 
-                    <!-- Submit Button -->
                     <x-primary-button class="mt-4">
                         {{ __('Update Product') }}
                     </x-primary-button>

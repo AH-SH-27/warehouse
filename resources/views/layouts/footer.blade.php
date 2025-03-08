@@ -10,10 +10,12 @@
 
             <div class="flex flex-col items-center justify-center gap-5">
                 <div class="flex justify-center space-x-4">
-                    <a href="#" class="hover:text-blue-500">Home</a>
-                    <a href="#" class="hover:text-blue-500">About</a>
-                    <a href="#" class="hover:text-blue-500">Services</a>
-                    <a href="#" class="hover:text-blue-500">Contact</a>
+                    <a :href="route('welcome')" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-50 hover:text-gray-400 cursor-pointer transition duration-150 ease-in-out">
+                        {{ __('Home') }}
+                    </a>
+                    <a :href="route('public.stores')" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-50 hover:text-gray-400 cursor-pointer transition duration-150 ease-in-out">
+                        {{ __('Stores') }}
+                    </a>
                 </div>
                 <div class="flex justify-center my-2 md:my-0 space-x-4">
                     <a href="#" class="hover:text-blue-500">
@@ -58,7 +60,7 @@
         </div>
 
         <div class="mt-8 pt-8 border-t border-gray-700 text-center">
-            <p>&copy; 2025 StockFlow. All rights reserved.</p>
+            <p>&copy; 2025 Vault. All rights reserved.</p>
         </div>
     </div>
 </footer>
