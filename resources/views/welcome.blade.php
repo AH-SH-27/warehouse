@@ -12,11 +12,12 @@
     <section class="py-20 bg-gradient-to-b from-gray-700 from-1%  via-gray-100 via-98% to-gray-400 to-1%">
         <h1 class="text-3xl md:text-4xl font-bold text-center text-white mb-6">Best Stores</h1>
         <hr class="bg-blue-500 h-1 w-1/5 flex mx-auto mb-12" />
-        <div class="flex flex-wrap items-center justify-center">
+        <div class="flex flex-wrap gap-5 items-center justify-center">
             @foreach ($randomStores as $store)
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-white w-96 h-75 rounded-lg shadow-md overflow-hidden">
                 <img src="{{ asset('storage/' . $store->image) }}"
                     class="w-full h-48 object-cover"
+                    loading="lazy"
                     alt="{{ $store->name }} Image">
                 <div class="p-4">
                     <h4 class="text-xl font-bold mb-2">
@@ -46,6 +47,7 @@
                         <img
                             src="{{ asset('storage/website_images/about-img.jpg') }}"
                             class="object-cover object-center w-full h-full"
+                            loading="lazy"
                             alt="About Us Image" />
                     </div>
                 </div>
@@ -63,8 +65,6 @@
             </div>
         </div>
     </section>
-
-
 
 
 

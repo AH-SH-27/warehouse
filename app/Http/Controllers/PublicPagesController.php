@@ -14,14 +14,14 @@ class PublicPagesController extends Controller
 {
     public function stores(): View
     {
-        $stores = Store::paginate(10);
+        $stores = Store::paginate(12);
 
         return view('stores', compact('stores'));
     }
 
     public function randomStores()
     {
-        $randomStores = Store::inRandomOrder()->take(4)->get();
+        $randomStores = Store::inRandomOrder()->take(3)->get();
         return view('welcome', compact('randomStores'));
     }
 
@@ -59,7 +59,8 @@ class PublicPagesController extends Controller
         }
 
         $products = $query->where('store_id', $store->id)
-            ->where('name', 'LIKE', "%{$searchName}%")->paginate(10);
+            ->where('name', 'LIKE', "%{$searchName}%")
+            ->paginate(12);
 
         return view('products', compact('products', 'store', 'categories', 'categoryId'));
     }
@@ -79,7 +80,7 @@ class PublicPagesController extends Controller
             $query->where('category_id', $categoryId);
         }
 
-        $products = $query->paginate(10);
+        $products = $query->paginate(12);
 
         return view('products', compact('products', 'store', 'categories', 'categoryId'));
     }

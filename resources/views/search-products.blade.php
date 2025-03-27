@@ -11,7 +11,7 @@
         @else
         <div class="flex flex-wrap gap-6">
             @foreach ($products as $product)
-            <div class="w-full flex flex-col gap-2 md:w-1/4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition">
+            <div class="w-full flex flex-col gap-2 mx-auto md:w-1/4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition">
                 <img src="{{ asset('storage/' . $product->image) }}"
                     class="w-full h-48 object-cover rounded-lg"
                     alt="{{ $product->name }} Image">
@@ -35,11 +35,47 @@
             </div>
             @endforeach
         </div>
-
-        <div class="mt-4">
-            {{ $products->links() }}
-        </div>
         @endif
     </div>
 
+    <script>
+        function addToCart(productId, productName, productPrice, stockQuantity) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let quantityInput = document.getElementById(`quantity-${productId}`);
+            let quantity = parseInt(quantityInput.value, 10);
+
+            // Validation: Check stock limit
+            if (quantity < 1) {
+                alert("Quantity must be at least 1.");
+                return;
+            }
+            if (quantity > stockQuantity) {
+                alert(`Only ${stockQuantity} items available in stock.`);
+                return;
+            }
+
+            // Check if the product already exists in the cart
+            let existingProduct = cart.find(item => item.id === productId);
+            if (existingProduct) {
+                let newQuantity = existingProduct.quantity + quantity;
+                if (newQuantity > stockQuantity) {
+                    alert(`Only ${stockQuantity} items available in stock.\nYou already have ${existingProduct.quantity} items in cart.\nYou are allowed to add ${Number(stockQuantity) - Number(existingProduct.quantity)} items.`);
+                    return;
+                }
+                existingProduct.quantity = newQuantity;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    stock: stockQuantity,
+                    quantity
+                });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            alert(`${quantity} x ${productName} added to cart!`);
+        }
+    </script>
 </x-app-layout>
